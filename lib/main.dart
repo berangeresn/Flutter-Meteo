@@ -30,6 +30,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List<String> cities = ["Paris", "Le Mans", "Rennes"];
 
+  String selectedCity;
+
   @override
   Widget build(BuildContext context) {
 
@@ -43,6 +45,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 return ListTile(
                   title: Text(
                       cities[i]),
+                  onTap: () {
+                    setState(() {
+                      selectedCity = cities[i];
+                      Navigator.pop(context);
+                    });
+                  },
                 );
               }),
         ),
@@ -51,12 +59,9 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-          ],
+          child: Text(
+              (selectedCity == null) ? "Ville actuelle" : selectedCity),
         ),
-      ),
-    );
+      );
   }
 }
