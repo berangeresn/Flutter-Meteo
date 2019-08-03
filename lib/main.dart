@@ -6,9 +6,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      title: 'Flutter Météo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+
       ),
       home: MyHomePage(title: 'Flutter Météo'),
     );
@@ -26,11 +28,25 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
+  List<String> cities = ["Paris", "Le Mans", "Rennes"];
 
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
+      drawer: Drawer(
+        child: Container(
+          color: Colors.lightBlueAccent,
+          child: ListView.builder(
+              itemCount: cities.length,
+              itemBuilder: (context, i) {
+                return ListTile(
+                  title: Text(
+                      cities[i]),
+                );
+              }),
+        ),
+      ),
       appBar: AppBar(
         title: Text(widget.title),
       ),
