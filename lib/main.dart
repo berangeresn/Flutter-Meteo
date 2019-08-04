@@ -121,6 +121,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     labelText: "Ville : ",
                   ),
                   onSubmitted: (String str) {
+                    addCities(str);
                     Navigator.pop(buildContext);
                   },
                 )
@@ -131,7 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  /// A function for shared preferences
+  /// A function with shared preferences
   void getCities() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     List<String> liste = await sharedPreferences.getStringList(key);
@@ -141,5 +142,13 @@ class _MyHomePageState extends State<MyHomePage> {
       });
     }
   }
+
+  /// A function to add a city with shared preferences
+ void addCities(String str) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    cities.add(str);
+    await sharedPreferences.setStringList(key, cities);
+    getCities();
+ }
 
 }
