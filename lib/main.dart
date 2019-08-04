@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_meteo/widgets/custom_text.dart';
+import 'package:async/async.dart';
+
 
 void main() => runApp(MyApp());
 
@@ -40,18 +43,47 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Container(
           color: Colors.lightBlueAccent,
           child: ListView.builder(
-              itemCount: cities.length,
+              itemCount: cities.length + 2,
               itemBuilder: (context, i) {
-                return ListTile(
-                  title: Text(
-                      cities[i]),
-                  onTap: () {
-                    setState(() {
-                      selectedCity = cities[i];
-                      Navigator.pop(context);
-                    });
-                  },
-                );
+                if (i == 0) {
+                  return DrawerHeader(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        CustomText("Mes villes", fontSize: 22.0,),
+                        RaisedButton(
+                          onPressed: addCity,
+                            child: CustomText("Ajouter une ville", color: Colors.blue, fontSize: 15.0,),
+                          color: Colors.white,
+                          shape: StadiumBorder(),
+                          elevation: 8.0,
+                          ),
+                      ],
+                    ),
+                  );
+                } else if (i == 1) {
+                  return ListTile(
+                    title: CustomText("Ma ville actuelle"),
+                    onTap: () {
+                      setState(() {
+                        selectedCity = null;
+                        Navigator.pop(context);
+                      });
+                    },
+                  );
+                } else {
+                  String city = cities[i - 2];
+                  return ListTile(
+                    title: CustomText(
+                        city),
+                    onTap: () {
+                      setState(() {
+                        selectedCity = city;
+                        Navigator.pop(context);
+                      });
+                    },
+                  );
+                }
               }),
         ),
       ),
@@ -64,4 +96,29 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       );
   }
+
+  Future<Null> addCity() async {
+    return showDialog(
+      barrierDismissible: true,
+        builder: (BuildContext buildContext) {
+            return SimpleDialog(
+              contentPadding: EdgeInsets.all(20.0),
+              shape: UnderlineInputBorder(),
+              title: CustomText("Ajouter une ville", fontSize: 22.0, color: Colors.blue,),
+              children: <Widget>[
+                TextField(
+                  decoration: InputDecoration(
+                    labelText: "Ville : ",
+                  ),
+                  onSubmitted: (String str) {
+                    Navigator.pop(buildContext);
+                  },
+                )
+              ],
+            );
+        },
+        context: context,
+    );
+  }
+
 }
