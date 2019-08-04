@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_meteo/widgets/custom_text.dart';
-import 'package:async/async.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 
 void main() => runApp(MyApp());
@@ -31,13 +32,21 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  List<String> cities = ["Paris", "Le Mans", "Rennes"];
+  String key = "villes";
+
+  List<String> cities = [];
 
   String selectedCity;
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
+    getCities();
+  }
 
+  @override
+  Widget build(BuildContext context) {
+/// Create Drawer with a selection of cities
     return Scaffold(
       drawer: Drawer(
         child: Container(
@@ -97,6 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
       );
   }
 
+  /// To add a city in the Drawer
   Future<Null> addCity() async {
     return showDialog(
       barrierDismissible: true,
@@ -119,6 +129,17 @@ class _MyHomePageState extends State<MyHomePage> {
         },
         context: context,
     );
+  }
+
+  /// A function for shared preferences
+  void getCities() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    List<String> liste = await sharedPreferences.getStringList(key);
+    if (liste != null) {
+      setState(() {
+        cities = liste;
+      });
+    }
   }
 
 }

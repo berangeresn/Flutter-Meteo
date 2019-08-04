@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// a custom widget for the text
 class CustomText extends Text {
 
   CustomText(
