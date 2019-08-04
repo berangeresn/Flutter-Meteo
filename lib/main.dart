@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_meteo/widgets/custom_text.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
 
-void main() => runApp(MyApp());
+void main() {
+  /// App in portrait orientation only - with services.dart
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
