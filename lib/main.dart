@@ -85,6 +85,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   return ListTile(
                     title: CustomText(
                         city),
+                    trailing: IconButton(
+                        icon: Icon(Icons.delete_outline, color: Colors.white,),
+                        onPressed: () {
+                          deleteCity(city);
+                        }),
                     onTap: () {
                       setState(() {
                         selectedCity = city;
@@ -151,4 +156,11 @@ class _MyHomePageState extends State<MyHomePage> {
     getCities();
  }
 
+ /// Delete a city with shared preferences
+  void deleteCity(String str) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    cities.remove(str);
+    await sharedPreferences.setStringList(key, cities);
+    getCities();
+  }
 }
