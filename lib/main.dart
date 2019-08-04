@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_meteo/widgets/custom_text.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:location/location.dart';
 
 
 
