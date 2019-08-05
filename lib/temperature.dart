@@ -1,7 +1,6 @@
 
 class Temperature {
 
-
   String main;
   String description;
   String icon;

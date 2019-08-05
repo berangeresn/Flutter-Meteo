@@ -5,7 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:location/location.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:http/http.dart' as http;
-
+import 'temperature.dart';
+import 'dart:convert';
 
 
 void main() {
@@ -44,6 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
   List<String> cities = [];
   String selectedCity;
   Coordinates coordsSelectedCity;
+  Temperature temperature;
 
   /// Location of the user
   Location location;
@@ -257,7 +259,12 @@ class _MyHomePageState extends State<MyHomePage> {
       String totalString = baseAPI + coordsString + units + lang + key;
       final response = await http.get(totalString);
       if (response.statusCode == 200) {
-        print(response.body);
+        /// convert json format
+        Map map = json.decode(response.body);
+        setState(() {
+          temperature = Temperature(map);
+          print("TEMPERATURE : ${temperature.description}");
+        });
       } else {
         print(response.statusCode);
       }
