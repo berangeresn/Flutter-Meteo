@@ -4,6 +4,7 @@ import 'package:flutter_meteo/widgets/custom_text.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:location/location.dart';
 import 'package:geocoder/geocoder.dart';
+import 'package:http/http.dart' as http;
 
 
 
@@ -92,6 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     onTap: () {
                       setState(() {
                         selectedCity = null;
+                        coordsSelectedCity = null;
                         Navigator.pop(context);
                       });
                     },
@@ -214,8 +216,7 @@ class _MyHomePageState extends State<MyHomePage> {
       Coordinates coordinates = new Coordinates(locationData.latitude, locationData.longitude);
       /// Get a city name
       final cityName = await Geocoder.local.findAddressesFromCoordinates(coordinates);
-      final first = cityName.first;
-      print(cityName.first.locality);
+      callApi();
     }
   }
 
@@ -228,8 +229,37 @@ class _MyHomePageState extends State<MyHomePage> {
         Coordinates coords = first.coordinates;
         setState(() {
           coordsSelectedCity = coords;
-          print(coordsSelectedCity);
+          callApi();
         });
+      }
+    }
+  }
+
+   callApi() async {
+    double lat;
+    double lon;
+    /// if we've got first coordinates
+    if (coordsSelectedCity != null) {
+      lat = coordsSelectedCity.latitude;
+      lon = coordsSelectedCity.longitude;
+    } else if (locationData != null) {
+      lat = locationData.latitude;
+      lon = locationData.longitude;
+    }
+
+    if (lat != null && lon != null) {
+      final key = "&APPID=1c144073c12f04975bee36e075109240";
+      /// get the language code
+      String lang = "&lang=${Localizations.localeOf(context).languageCode}";
+      String baseAPI = "http://api.openweathermap.org/data/2.5/weather?";
+      String coordsString = "lat=$lat&lon=$lon";
+      String units = "&units=metrics";
+      String totalString = baseAPI + coordsString + units + lang + key;
+      final response = await http.get(totalString);
+      if (response.statusCode == 200) {
+        print(response.body);
+      } else {
+        print(response.statusCode);
       }
     }
   }
