@@ -7,6 +7,7 @@ import 'package:geocoder/geocoder.dart';
 import 'package:http/http.dart' as http;
 import 'temperature.dart';
 import 'dart:convert';
+import 'my_flutter_app_icons.dart';
 
 
 void main() {
@@ -144,20 +145,41 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            CustomText((selectedCity == null) ? "Ville actuelle" : selectedCity, fontSize: 40.0, color: Colors.black87,),
-            CustomText(temperature.description, fontSize: 25.0, color: Colors.black, fontStyle: FontStyle.italic,),
+            CustomText((selectedCity == null) ? "Ville actuelle" : selectedCity, fontSize: 40.0, color: Colors.white,),
+            CustomText(temperature.description, fontSize: 25.0, color: Colors.white, fontStyle: FontStyle.italic,),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 Image.network("http://openweathermap.org/img/wn/${temperature.icon}@2x.png"),
-                CustomText("${temperature.temp.toInt()} °C", color: Colors.black, fontSize: 68.0,),
+                CustomText("${temperature.temp.toInt()}°C", color: Colors.white, fontSize: 68.0,),
               ],
-            )
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                extra("${temperature.tempMin.toInt()}°C", MyFlutterApp.down),
+                extra("${temperature.tempMax.toInt()}°C", MyFlutterApp.up),
+                extra("${temperature.pressure.toInt()}", MyFlutterApp.temperatire),
+                extra("${temperature.humidity.toInt()}%", MyFlutterApp.rain)
+              ],
+            ),
           ],
         ),
       )
       );
   }
+
+  /// A column for flutter icons
+  Column extra(String data, IconData iconData) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        Icon(iconData, color: Colors.white, size: 28.0,),
+        CustomText(data)
+      ],
+    );
+  }
+
 
   /// To add a city in the Drawer
   Future<Null> addCity() async {
@@ -214,7 +236,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   /// Background images
   AssetImage getBackground() {
-    print(temperature.icon);
     if (temperature.icon.contains("n")) {
       return night;
     } else if ((temperature.icon.contains("01d")) || (temperature.icon.contains("02d"))) {
