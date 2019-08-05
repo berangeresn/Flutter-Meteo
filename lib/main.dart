@@ -47,6 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String selectedCity;
   Coordinates coordsSelectedCity;
   Temperature temperature;
+  String currentName = "Ville actuelle";
 
   AssetImage night = AssetImage("assets/night.jpg");
   AssetImage sun = AssetImage("assets/day.jpg");
@@ -100,11 +101,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   );
                 } else if (i == 1) {
                   return ListTile(
-                    title: CustomText("Ma ville actuelle"),
+                    title: CustomText(currentName),
                     onTap: () {
                       setState(() {
                         selectedCity = null;
                         coordsSelectedCity = null;
+                        callApi();
                         Navigator.pop(context);
                       });
                     },
@@ -135,7 +137,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: (temperature == null)
-          ? Center(child: Text((selectedCity == null) ? "Ville actuelle" : selectedCity))
+          ? Center(child: Text((selectedCity == null) ? currentName : selectedCity))
           : Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
@@ -145,7 +147,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            CustomText((selectedCity == null) ? "Ville actuelle" : selectedCity, fontSize: 40.0, color: Colors.white,),
+            CustomText((selectedCity == null) ? currentName : selectedCity, fontSize: 40.0, color: Colors.white,),
             CustomText(temperature.description, fontSize: 25.0, color: Colors.white, fontStyle: FontStyle.italic,),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -284,7 +286,10 @@ class _MyHomePageState extends State<MyHomePage> {
       Coordinates coordinates = new Coordinates(locationData.latitude, locationData.longitude);
       /// Get a city name
       final cityName = await Geocoder.local.findAddressesFromCoordinates(coordinates);
-      callApi();
+      setState(() {
+        currentName = cityName.first.locality;
+        callApi();
+      });
     }
   }
 
@@ -329,7 +334,6 @@ class _MyHomePageState extends State<MyHomePage> {
         Map map = json.decode(response.body);
         setState(() {
           temperature = Temperature(map);
-          print("TEMPERATURE : ${temperature.description}");
         });
       } else {
         print(response.statusCode);
