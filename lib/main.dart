@@ -139,7 +139,21 @@ class _MyHomePageState extends State<MyHomePage> {
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(
-          image: DecorationImage(image: getBackground(), fit: BoxFit.fill,)
+          image: DecorationImage(image: getBackground(), fit: BoxFit.cover,)
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            CustomText((selectedCity == null) ? "Ville actuelle" : selectedCity, fontSize: 40.0, color: Colors.black87,),
+            CustomText(temperature.description, fontSize: 25.0, color: Colors.black, fontStyle: FontStyle.italic,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Image.network("http://openweathermap.org/img/wn/${temperature.icon}@2x.png"),
+                CustomText("${temperature.temp} °F", color: Colors.black,),
+              ],
+            )
+          ],
         ),
       )
       );
