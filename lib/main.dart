@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_meteo/widgets/custom_text.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:location/location.dart';
+import 'package:geocoder/geocoder.dart';
 
 
 
@@ -58,24 +58,6 @@ class _MyHomePageState extends State<MyHomePage> {
     listenToStream();
   }
 
-  /// Get User Location
-  getFirstLocation() async {
-    try {
-      locationData = await location.getLocation();
-      print("Nouvelle position : ${locationData.latitude} / ${locationData.longitude}");
-    } catch (e) {
-      print("Erreur : $e");
-    }
-  }
-
-  /// Récupérer le flux de données
-  /// Each change
-  listenToStream() {
-    stream = location.onLocationChanged();
-    stream.listen((newPosition) {
-      print("New position : ${newPosition.latitude} / ${newPosition.longitude}");
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -196,4 +178,43 @@ class _MyHomePageState extends State<MyHomePage> {
     await sharedPreferences.setStringList(key, cities);
     getCities();
   }
+
+  /// Get User Location
+  getFirstLocation() async {
+    try {
+      locationData = await location.getLocation();
+      print("Nouvelle position : ${locationData.latitude} / ${locationData.longitude}");
+      locationToString();
+    } catch (e) {
+      print("Erreur : $e");
+    }
+  }
+
+  /// Récupérer le flux de données
+  /// Each change of location
+  listenToStream() {
+    stream = location.onLocationChanged();
+    stream.listen((newPosition) {
+      if ((locationData == null) || (newPosition.longitude != locationData.longitude) && (newPosition.latitude != locationData.latitude)) {
+        /// Get locality name
+        setState(() {
+          print("New position : ${newPosition.latitude} / ${newPosition.longitude}");
+          locationData = newPosition;
+          locationToString();
+        });
+      }
+    });
+  }
+
+  /// Geocoder : forward and reverse geocoding
+  locationToString() async {
+    if (locationData != null) {
+      Coordinates coordinates = new Coordinates(locationData.latitude, locationData.longitude);
+      /// Get a city name
+      final cityName = await Geocoder.local.findAddressesFromCoordinates(coordinates);
+      final first = cityName.first;
+      print(cityName.first.locality);
+    }
+  }
+
 }
