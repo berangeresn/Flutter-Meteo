@@ -54,7 +54,8 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     getCities();
     location = new Location();
-    getFirstLocation();
+    //getFirstLocation();
+    listenToStream();
   }
 
   /// Get User Location
@@ -65,6 +66,15 @@ class _MyHomePageState extends State<MyHomePage> {
     } catch (e) {
       print("Erreur : $e");
     }
+  }
+
+  /// Récupérer le flux de données
+  /// Each change
+  listenToStream() {
+    stream = location.onLocationChanged();
+    stream.listen((newPosition) {
+      print("New position : ${newPosition.latitude} / ${newPosition.longitude}");
+    });
   }
 
   @override
