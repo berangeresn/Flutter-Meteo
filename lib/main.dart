@@ -40,15 +40,31 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
 
   String key = "villes";
-
   List<String> cities = [];
-
   String selectedCity;
+
+  /// Location of the user : variables
+  Location location;
+  LocationData locationData;
+  Stream<LocationData> stream;
+
 
   @override
   void initState() {
     super.initState();
     getCities();
+    location = new Location();
+    getFirstLocation();
+  }
+
+  /// Get User Location
+  getFirstLocation() async {
+    try {
+      locationData = await location.getLocation();
+      print("Nouvelle position : ${locationData.latitude} / ${locationData.longitude}");
+    } catch (e) {
+      print("Erreur : $e");
+    }
   }
 
   @override
