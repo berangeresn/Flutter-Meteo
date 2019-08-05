@@ -62,6 +62,10 @@ flutter:
     - assets/n.jpg
     - assets/night.jpg
     - assets/rain.jpg
+    - assets/cloud.jpg
+    - assets/snow1.jpg
+    - assets/storm.jpg
+    - assets/mist.jpg
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
 

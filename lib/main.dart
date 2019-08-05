@@ -47,6 +47,14 @@ class _MyHomePageState extends State<MyHomePage> {
   Coordinates coordsSelectedCity;
   Temperature temperature;
 
+  AssetImage night = AssetImage("assets/night.jpg");
+  AssetImage sun = AssetImage("assets/day.jpg");
+  AssetImage rain = AssetImage("assets/rain.jpg");
+  AssetImage cloud = AssetImage("assets/cloud.jpg");
+  AssetImage snow = AssetImage("assets/snow1.jpg");
+  AssetImage storm = AssetImage("assets/storm.jpg");
+  AssetImage mist = AssetImage("assets/mist.jpg");
+
   /// Location of the user
   Location location;
   LocationData locationData;
@@ -125,10 +133,15 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
-          child: Text(
-              (selectedCity == null) ? "Ville actuelle" : selectedCity),
+      body: (temperature == null)
+          ? Center(child: Text((selectedCity == null) ? "Ville actuelle" : selectedCity))
+          : Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        decoration: BoxDecoration(
+          image: DecorationImage(image: getBackground(), fit: BoxFit.fill,)
         ),
+      )
       );
   }
 
@@ -183,6 +196,24 @@ class _MyHomePageState extends State<MyHomePage> {
     cities.remove(str);
     await sharedPreferences.setStringList(key, cities);
     getCities();
+  }
+
+  /// Background images
+  AssetImage getBackground() {
+    print(temperature.icon);
+    if (temperature.icon.contains("n")) {
+      return night;
+    } else if ((temperature.icon.contains("01d")) || (temperature.icon.contains("02d"))) {
+      return sun;
+    } else if ((temperature.icon.contains("03d")) || (temperature.icon.contains("04d"))) {
+      return cloud;
+    } else if ((temperature.icon.contains("09d")) || (temperature.icon.contains("10d"))) {
+      return rain;
+    } else if (temperature.icon.contains("13d")) {
+      return snow;
+    } else if (temperature.icon.contains("50d")) {
+      return mist;
+    }
   }
 
   /// Get User Location
