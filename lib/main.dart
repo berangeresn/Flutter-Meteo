@@ -150,7 +150,7 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 Image.network("http://openweathermap.org/img/wn/${temperature.icon}@2x.png"),
-                CustomText("${temperature.temp} °F", color: Colors.black,),
+                CustomText("${temperature.temp.toInt()} °C", color: Colors.black, fontSize: 68.0,),
               ],
             )
           ],
@@ -300,7 +300,7 @@ class _MyHomePageState extends State<MyHomePage> {
       String lang = "&lang=${Localizations.localeOf(context).languageCode}";
       String baseAPI = "http://api.openweathermap.org/data/2.5/weather?";
       String coordsString = "lat=$lat&lon=$lon";
-      String units = "&units=metrics";
+      String units = "&units=metric";
       String totalString = baseAPI + coordsString + units + lang + key;
       final response = await http.get(totalString);
       if (response.statusCode == 200) {
