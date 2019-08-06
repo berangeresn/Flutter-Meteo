@@ -324,10 +324,11 @@ class _MyHomePageState extends State<MyHomePage> {
       final key = "&APPID=1c144073c12f04975bee36e075109240";
       /// get the language code
       String lang = "&lang=${Localizations.localeOf(context).languageCode}";
+      String langFr = "&lang=fr";
       String baseAPI = "http://api.openweathermap.org/data/2.5/weather?";
       String coordsString = "lat=$lat&lon=$lon";
       String units = "&units=metric";
-      String totalString = baseAPI + coordsString + units + lang + key;
+      String totalString = baseAPI + coordsString + units + langFr + key;
       final response = await http.get(totalString);
       if (response.statusCode == 200) {
         /// convert json format
