@@ -75,7 +75,7 @@ flutter:
         - asset: flutter-icons/fonts/MyFlutterApp.ttf
     - family: Roboto
       fonts:
-        - asset: assets/Roboto/Roboto-Medium.ttf
+        - asset: assets/Roboto/Roboto-Light.ttf
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
